@@ -160,6 +160,16 @@ int16_t canardSTM32Receive(CanardCANFrame* const out_frame);
  * Setting zero filters will result in rejection of all frames.
  * In order to accept all frames, set one filter with ID = Mask = 0, which is also the default configuration.
  *
+ * Because uavcan messages are in an extended frame format, adding a filter for a frame ID isn't as intuitive as 
+ * setting the .id member to the number of your message. You will need to bit shift your ID and mask 8 bits to
+ * the left for filtering to work properly.
+ *
+ * For example: If you want to filter for only NodeStatus messages which have an ID of 341, you will set the ID
+ * and mask like so
+ *
+ * filter_config.id = 0x155 << 8
+ * filter_config.mask = 0xFFFF << 8
+ *
  * @retval      0               Success
  * @retval      negative        Error
  */
